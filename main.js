@@ -2,7 +2,49 @@
 const EMPTY_HEART = '♡'
 const FULL_HEART = '♥'
 
-// Your JavaScript code goes here!
+/document.addEventListener("DOMContentLoaded", () => {
+  const errorModal = document.getElementById("modal");
+  const likeButtons = document.querySelectorAll(".like-glyph");
+
+  
+  errorModal.classList.add("hidden");
+
+  likeButtons.forEach((likeButton) => {
+    likeButton.addEventListener("click", () => {
+      mimicServerCall()
+        .then(() => {
+          likeButton.classList.toggle("activated-heart");
+          if (likeButton.innerHTML === "♡") {
+            likeButton.innerHTML = "♥";
+          } else {
+            likeButton.innerHTML = "♡";
+          }
+        })
+        .catch((error) => {
+          errorModal.classList.remove("hidden");
+          const errorMessage = document.getElementById("modal-message");
+          errorMessage.innerText = error;
+          setTimeout(() => {
+            errorModal.classList.add("hidden");
+          }, 3000);
+        });
+    });
+  });
+
+  function mimicServerCall() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const random = Math.random();
+        if (random < 0.2) {
+          reject("Random server error. Please try again.");
+        } else {
+          resolve("Success!");
+        }
+      }, 1000);
+    });
+  }
+});
+!
 
 
 
